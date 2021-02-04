@@ -5,23 +5,23 @@
 
     $scope.shoppingList = [
       {
-        name:'Object1',
+        name:'Apple',
         quantity:1
       },
       {
-        name:'Object2',
+        name:'Orange',
         quantity:2
       },
       {
-        name:'Object3',
+        name:'Guava',
         quantity:3
       },
       {
-        name:'Object4',
+        name:'Cookie',
         quantity:4
       },
       {
-        name:'Object5',
+        name:'Bread',
         quantity:5
       }
     ];
