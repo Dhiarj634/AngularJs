@@ -2,36 +2,35 @@
   angular.module('app',[])
   .controller('myController',['$scope',MyController]);
   function MyController($scope){
-    $scope.foodList="";
-    $scope.message = "";
-    $scope.color="red";
-    $scope.checkTheFood = function(){
-      var list = $scope.foodList.split(',').filter(function(food){
-        if(food.trim().length === 0)
-        {
-          return false;
-        }
-        else{
-          return true;
-        }
-      });
-      if(list.length === 0)
-      {
-        $scope.message = 'Please enter data first';
-        $scope.color='red';
 
-      }
-      else if(list.length <=3){
-        $scope.message = 'Enjoy!';
-        $scope.color='green';
-      }
-      else if(list.length >= 4)
+    $scope.shoppingList = [
       {
-        $scope.message = 'Too much!';
-        $scope.color='green';
+        name:'Object1',
+        quantity:1
+      },
+      {
+        name:'Object2',
+        quantity:2
+      },
+      {
+        name:'Object3',
+        quantity:3
+      },
+      {
+        name:'Object4',
+        quantity:4
+      },
+      {
+        name:'Object5',
+        quantity:5
       }
+    ];
+    $scope.boughtList=[];
+
+    $scope.bought = function(index){
+      $scope.boughtList.push($scope.shoppingList[index]);
+      $scope.shoppingList.splice(index,1);
     }
-
 
   }
 })();
