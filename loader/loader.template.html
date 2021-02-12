@@ -1,0 +1,13 @@
+<div class="loader">
+<ol>
+  <li ng-repeat='item in itemCtrl.items'>
+    <b>{{item.name}}</b>
+    <button type="button" name="button" ng-click='itemCtrl.onRemove({shortName : item.short_name})'>Don't Want this one</button>
+    <ul>
+      <li>{{item.short_name}}</li>
+      <li>{{item.description}}</li>
+    </ul>
+
+  </li>
+</ol>
+</div>

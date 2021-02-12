@@ -1,36 +1,81 @@
 (function(){
   angular.module('app',[])
-  .controller('myController',['$scope',MyController]);
-  function MyController($scope){
+  .controller('narrowItDowncontroller',['$scope','$q','menuSearchService',NarrowItDowncontroller])
+  .service('menuSearchService',['$http','$q',MenuSearchService])
+  .directive('foundItems',FoundItems);
 
-    $scope.shoppingList = [
+  //Controller
+  function NarrowItDowncontroller($scope,$q,menuSearchService){
+    $scope.searchString="";
+    $scope.showNotification=false;
+    $scope.Items=[];
+    $scope.getTheMenu = function(){
+      $scope.showNotification=false;
+      if($scope.searchString.length == 0)
       {
-        name:'Apple',
-        quantity:1
-      },
-      {
-        name:'Orange',
-        quantity:2
-      },
-      {
-        name:'Guava',
-        quantity:3
-      },
-      {
-        name:'Cookie',
-        quantity:4
-      },
-      {
-        name:'Bread',
-        quantity:5
+        $scope.items=[];
+        $scope.foundItems=[];
+        $scope.showNotification=true;
+        return;
       }
-    ];
-    $scope.boughtList=[];
+      var promise = (menuSearchService.getMatchedMenuItems($scope.searchString));
+      promise.then(function(response){
+        $scope.Items = response.data.menu_items;
+        $scope.foundItems = $scope.Items.filter(item => { return item.description.indexOf($scope.searchString) >= 0;});
+        if($scope.foundItems == 0)
+        {
+          $scope.showNotification=true;
+          return;
+        }
+      });
 
-    $scope.bought = function(index){
-      $scope.boughtList.push($scope.shoppingList[index]);
-      $scope.shoppingList.splice(index,1);
+    }
+    $scope.remove =function(shortName)
+    {
+      $scope.foundItems = $scope.foundItems.filter(item => {return item.short_name!== shortName;});
+    }
+  }
+
+
+  //Directive
+  function FoundItems(){
+    var ddo = {
+        templateUrl:'loader/loader.template.html',
+        scope : {
+          items : '=items',
+          onRemove: '&onRemove'
+        },
+        controller:ItemsControllerFunction,
+        bindToController:true,
+        controllerAs:'itemCtrl',
     }
 
+    return ddo;
   }
+
+  function ItemsControllerFunction()
+  {
+    var myCtrl = this;
+
+  }
+
+
+
+
+
+  //Service
+function MenuSearchService($http,$q){
+
+  var service = {
+    getMatchedMenuItems: function(foundValues,searchItem){
+      var link = 'https://davids-restaurant.herokuapp.com/menu_items.json';
+      var items = $http.get(link);
+      return items;
+    }
+  };
+
+  return service;
+}
+
+
 })();
